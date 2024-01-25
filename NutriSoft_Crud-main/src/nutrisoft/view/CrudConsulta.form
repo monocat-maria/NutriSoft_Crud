@@ -9,9 +9,6 @@
           <Dimension value="[464, 333]"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="cadastroConsultaWindowClosed"/>
-      </Events>
 
       <Layout>
         <DimensionLayout dim="0">

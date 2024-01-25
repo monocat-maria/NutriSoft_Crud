@@ -19,14 +19,12 @@ public class CrudConsulta extends javax.swing.JFrame {
     /**
      * Creates new form CrudConsulta
      */
-    
     private final String[] tableColumns = {"Paciente", "CPF", "Telefone", "Data", "Já era paciente?", "Consulta realizada"};
 
     DefaultTableModel tableModel = new DefaultTableModel(tableColumns, 0);
-    
+
     private List<Consulta> consultasList = new ArrayList<>();
-    
-    
+
     public CrudConsulta() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -72,11 +70,6 @@ public class CrudConsulta extends javax.swing.JFrame {
 
         cadastroConsulta.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         cadastroConsulta.setMinimumSize(new java.awt.Dimension(464, 333));
-        cadastroConsulta.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                cadastroConsultaWindowClosed(evt);
-            }
-        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -381,13 +374,17 @@ public class CrudConsulta extends javax.swing.JFrame {
         cadastroConsulta.setVisible(true);
         cadastroConsulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         cadastroConsulta.setLocationRelativeTo(null);
-        
+
     }//GEN-LAST:event_button_novaConsutaActionPerformed
 
     private void button_finalizarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_finalizarConsultaActionPerformed
         mostrarDetalheConsulta();
-        getReceitaPane();
-        setButtonVisible();
+
+        try {
+            getReceitaPane();
+            setButtonVisible();
+        } catch (Exception e) {
+        }
         validateConsulta();
     }//GEN-LAST:event_button_finalizarConsultaActionPerformed
 
@@ -403,9 +400,9 @@ public class CrudConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_checkbox_pacienteActionPerformed
 
     private void button_cadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_cadastrarActionPerformed
-        if(emptyFields() == true){
-            
-        }else if(emptyFields() == false && validateFields() == false){
+        if (emptyFields() == true) {
+
+        } else if (emptyFields() == false && validateFields() == false) {
             getConsulta();
             inserirConsulta(getConsulta());
             cadastroConsulta.dispose();
@@ -417,10 +414,6 @@ public class CrudConsulta extends javax.swing.JFrame {
     private void button_excluirConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_excluirConsultaActionPerformed
         excluirConsulta();
     }//GEN-LAST:event_button_excluirConsultaActionPerformed
-
-    private void cadastroConsultaWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_cadastroConsultaWindowClosed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cadastroConsultaWindowClosed
 
     private void checkbox_consultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkbox_consultaActionPerformed
         // TODO add your handling code here:
@@ -504,192 +497,228 @@ public class CrudConsulta extends javax.swing.JFrame {
     private javax.swing.JTextPane textPane_receita;
     // End of variables declaration//GEN-END:variables
 
-     public Consulta getConsulta() {
+    public Consulta getConsulta() {
         Consulta consulta = new Consulta();
 
-        consulta.setNome_paciente(input_nomePaciente.getText());
-        consulta.setTelefone_paciente(input_telefone.getText());
-        consulta.setCpf_paciente(input_cpf.getText());
-        consulta.setData_Consulta(input_dataConsulta.getText());
-        consulta.setConsulta_realizada("não");
-        consulta.setReceita(textPane_receita.getText());
-        
-        if(checkbox_paciente.isSelected()){
-            consulta.setPaciente_cadastrado("sim");
-        }else{
-            consulta.setPaciente_cadastrado("não");
+        try {
+
+            consulta.setNome_paciente(input_nomePaciente.getText());
+            consulta.setTelefone_paciente(input_telefone.getText());
+            consulta.setCpf_paciente(input_cpf.getText());
+            consulta.setData_Consulta(input_dataConsulta.getText());
+            consulta.setConsulta_realizada("não");
+            consulta.setReceita(textPane_receita.getText());
+
+            if (checkbox_paciente.isSelected()) {
+                consulta.setPaciente_cadastrado("sim");
+            } else {
+                consulta.setPaciente_cadastrado("não");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Ocorreu um erro ao cadastrar a consulta.\nERRO:" + e.getMessage());
         }
 
         return consulta;
     }
-     
-    private void printConsulta(){
+
+    private void printConsulta() {
         JOptionPane.showMessageDialog(rootPane, "Consulta cadastrada com sucesso.\nNome do paciente:" + input_nomePaciente.getText()
-        + "\nTelefone:" + input_telefone.getText()
-        + "\nCPF:" + input_cpf.getText()
-        + "\nData da consulta:" + input_dataConsulta.getText());
+                + "\nTelefone:" + input_telefone.getText()
+                + "\nCPF:" + input_cpf.getText()
+                + "\nData da consulta:" + input_dataConsulta.getText());
     }
-    
+
     private void inserirConsulta(Consulta consulta) {
-        consultasList.add(consulta);
-        atualizarTabela();
-    }
-    
-    private int getIndexConsulta(){
-        int indexConsulta = table_consultas.getSelectedRow();
-        
-        if(indexConsulta == -1){
-            JOptionPane.showMessageDialog(rootPane, "Selecione uma consulta.");
+        try {
+            consultasList.add(consulta);
+            atualizarTabela();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Não foi possível adicionar a consulta na tabela.\nERRO:" + e.getMessage());
         }
-        
+    }
+
+    private int getIndexConsulta() {
+        int indexConsulta = table_consultas.getSelectedRow();
+
+        try {
+            if (indexConsulta == -1) {
+                JOptionPane.showMessageDialog(rootPane, "Selecione uma consulta.");
+            }
+        } catch (Exception e) {
+
+        }
         return indexConsulta;
     }
-    
-    private void excluirConsulta(){
-        String[] option = {"Sim","Não"};
-        
-        if(getIndexConsulta() >= 0){
-            int delete = JOptionPane.showOptionDialog(rootPane, "Tem certeza que deseja excluir a consulta?", "Excluir consulta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-        
-            if(delete == 0){
-                consultasList.remove(getIndexConsulta());
-                atualizarTabela();
-            }else{
-                table_consultas.clearSelection();
+
+    private void excluirConsulta() {
+
+        try {
+            String[] option = {"Sim", "Não"};
+
+            if (getIndexConsulta() >= 0) {
+                int delete = JOptionPane.showOptionDialog(rootPane, "Tem certeza que deseja excluir a consulta?", "Excluir consulta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+
+                if (delete == 0) {
+                    consultasList.remove(getIndexConsulta());
+                    atualizarTabela();
+                } else {
+                    table_consultas.clearSelection();
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Não foi possível excluir consulta");
         }
     }
 
     private void finalizarConsulta() {
-        String[] option = {"Sim","Não"};
-        int finalizar = JOptionPane.showOptionDialog(rootPane, "Tem certeza que deseja finalizar a consulta?", "Excluir consulta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-        
-        if(finalizar == 0){
-            consultasList.get(getIndexConsulta()).setConsulta_realizada("sim");             
-        }else{
-            consultasList.get(getIndexConsulta()).setConsulta_realizada("não");
+
+        try {
+            String[] option = {"Sim", "Não"};
+            int finalizar = JOptionPane.showOptionDialog(rootPane, "Tem certeza que deseja finalizar a consulta?", "Excluir consulta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+
+            if (finalizar == 0) {
+                consultasList.get(getIndexConsulta()).setConsulta_realizada("sim");
+            } else {
+                consultasList.get(getIndexConsulta()).setConsulta_realizada("não");
+            }
+
+            detalheConsulta.dispose();
+        } catch (Exception e) {
+
         }
-        
-        detalheConsulta.dispose();
     }
-    
-    private void validateConsulta(){
+
+    private void validateConsulta() {
         checkbox_consulta.setSelected(true);
         checkbox_consulta.setEnabled(false);
     }
-    
-    
+
     private void mostrarDetalheConsulta() {
-        if (!(getIndexConsulta() == -1)) {
-            
-            detalheConsulta.setVisible(true);
-            detalheConsulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            detalheConsulta.setLocationRelativeTo(null);
+        try {
+            if (!(getIndexConsulta() == -1)) {
+                detalheConsulta.setVisible(true);
+                detalheConsulta.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                detalheConsulta.setLocationRelativeTo(null);
+            }
+        } catch (Exception e) {
+
         }
+
     }
-    
-    private void setReceitaPane(){
+
+    private void setReceitaPane() {
         consultasList.get(getIndexConsulta()).setReceita(textPane_receita.getText());
     }
-    
-    private void getReceitaPane(){
+
+    private void getReceitaPane() {
+
         textPane_receita.setText(consultasList.get(table_consultas.getSelectedRow()).getReceita());
+
     }
-    
-    private void setButtonVisible(){
-        if(consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("não")){
+
+    private void setButtonVisible() {
+
+        if (consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("não")) {
             button_finalizar.setVisible(true);
-        }else if(consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("sim")){
+        } else if (consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("sim")) {
             button_finalizar.setVisible(false);
         }
     }
-      
-    private void cleanFields(){
+
+    private void cleanFields() {
         input_nomePaciente.setText("");
         input_telefone.setText("");
         input_cpf.setText("");
-        input_dataConsulta.setText(""); 
+        input_dataConsulta.setText("");
     }
 
     private boolean emptyFields() {
 
         boolean empty = true;
 
-        if (input_nomePaciente.getText().trim().isEmpty()) {
+        try {
+            if (input_nomePaciente.getText().trim().isEmpty()) {
 
-            JOptionPane.showMessageDialog(rootPane, "Insira nome do Paciente!\nNome não pode ser vazio.");
-        } else if (input_telefone.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Insira nome do Paciente!\nNome não pode ser vazio.");
+            } else if (input_telefone.getText().trim().isEmpty()) {
 
-            JOptionPane.showMessageDialog(rootPane, "Insira um telefone!\nNúmero de telefone não pode ser vazio.");
-        } else if (input_cpf.getText().trim().isEmpty()) {
-            
-            JOptionPane.showMessageDialog(rootPane, "Insira um CPF!\nCPF do paciente não pode ser vazio.");
-        } else if (input_dataConsulta.getText().trim().isEmpty()) {
-            
-            JOptionPane.showMessageDialog(rootPane, "Insira a data da consulta!\nData da consulta não pode ser vazio.");
-        } else {
-            empty = false;
+                JOptionPane.showMessageDialog(rootPane, "Insira um telefone!\nNúmero de telefone não pode ser vazio.");
+            } else if (input_cpf.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(rootPane, "Insira um CPF!\nCPF do paciente não pode ser vazio.");
+            } else if (input_dataConsulta.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(rootPane, "Insira a data da consulta!\nData da consulta não pode ser vazio.");
+            } else {
+                empty = false;
+            }
+        } catch (Exception e) {
+
         }
+
         return empty;
     }
-    
-    private boolean emptyPane(){
+
+    private boolean emptyPane() {
         boolean emptyPane = true;
-        
-        if (textPane_receita.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Insira a receita ou alguma observação.");
-        }else{
-            emptyPane = false;
+
+        try {
+            if (textPane_receita.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Insira a receita ou alguma observação.");
+            } else {
+                emptyPane = false;
+            }
+        } catch (Exception e) {
+
         }
-        
         return emptyPane;
     }
-    
-    private boolean validateFields(){
-        
+
+    private boolean validateFields() {
         boolean validate = true;
-        
-        if(!input_telefone.getText().matches("[0-9]{10,11}")){
-          JOptionPane.showMessageDialog(rootPane,"Número de telefone inválido.\nDigite apenas números, sem parênteses ou traços.");
-        }else if(!input_cpf.getText().matches("[0-9]{3}[0-9]{3}[0-9]{3}[0-9]{2}")){
-            JOptionPane.showMessageDialog(rootPane,"CPF Inválido.\nDigite somente números, sem pontos ou traços.");
-        }else if(!input_dataConsulta.getText().matches("[0-9]{2}[/][0-9]{2}[/][0-9]{4}")){
-            JOptionPane.showMessageDialog(rootPane, "Formato de data inválida.\nDigite a data no formato dd/mm/aaaa." );
-        }else{
-            validate = false;
+
+        try {
+            if (!input_telefone.getText().matches("[0-9]{10,11}")) {
+                JOptionPane.showMessageDialog(rootPane, "Número de telefone inválido.\nDigite apenas números, sem parênteses ou traços.");
+            } else if (!input_cpf.getText().matches("[0-9]{3}[0-9]{3}[0-9]{3}[0-9]{2}")) {
+                JOptionPane.showMessageDialog(rootPane, "CPF Inválido.\nDigite somente números, sem pontos ou traços.");
+            } else if (!input_dataConsulta.getText().matches("[0-9]{2}[/][0-9]{2}[/][0-9]{4}")) {
+                JOptionPane.showMessageDialog(rootPane, "Formato de data inválida.\nDigite a data no formato dd/mm/aaaa.");
+            } else {
+                validate = false;
+            }
+        } catch (Exception e) {
         }
-        
         return validate;
     }
 
     private void atualizarTabela() {
-        if (!consultasList.isEmpty()) {
 
-            Consulta consulta;
+        try {
+            if (!consultasList.isEmpty()) {
 
-            tableModel = new DefaultTableModel(tableColumns, 0);
+                Consulta consulta;
 
-            for (int i = 0; i < consultasList.size(); i++) {
+                tableModel = new DefaultTableModel(tableColumns, 0);
 
-                consulta = consultasList.get(i);
+                for (int i = 0; i < consultasList.size(); i++) {
 
-                String[] rowData = {consulta.getNome_paciente(), consulta.getTelefone_paciente(), consulta.getCpf_paciente(), consulta.getData_consulta(), consulta.getPaciente_cadastrado(), consulta.getConsulta_realizada()};
+                    consulta = consultasList.get(i);
 
-                tableModel.addRow(rowData);
+                    String[] rowData = {consulta.getNome_paciente(), consulta.getTelefone_paciente(), consulta.getCpf_paciente(), consulta.getData_consulta(), consulta.getPaciente_cadastrado(), consulta.getConsulta_realizada()};
+
+                    tableModel.addRow(rowData);
+                }
+
+                table_consultas.setModel(tableModel);
+            } else {
+
+                tableModel = new DefaultTableModel(tableColumns, 0);
+                table_consultas.setModel(tableModel);
             }
-
-            table_consultas.setModel(tableModel);
-        } else {
-
-            tableModel = new DefaultTableModel(tableColumns, 0);
-            table_consultas.setModel(tableModel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Não é possível visualizar consultas na tabela.\nERRO:" + e.getMessage());
         }
     }
-
-    
-    
 }
-
-
-
-
