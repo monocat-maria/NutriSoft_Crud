@@ -19,7 +19,7 @@ public class CrudConsulta extends javax.swing.JFrame {
     /**
      * Creates new form CrudConsulta
      */
-    private final String[] tableColumns = {"Paciente", "CPF", "Telefone", "Data", "Já era paciente?", "Consulta realizada"};
+    private final String[] tableColumns = {"Paciente", "CPF", "Telefone", "Data", "Já era paciente?", "Consulta"};
 
     DefaultTableModel tableModel = new DefaultTableModel(tableColumns, 0);
 
@@ -194,6 +194,13 @@ public class CrudConsulta extends javax.swing.JFrame {
 
         detalheConsulta.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         detalheConsulta.setMinimumSize(new java.awt.Dimension(400, 330));
+        detalheConsulta.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                detalheConsultaWindowLostFocus(evt);
+            }
+        });
 
         label_detalhes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         label_detalhes.setText("Detalhes da Consulta");
@@ -428,6 +435,10 @@ public class CrudConsulta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_button_finalizarActionPerformed
 
+    private void detalheConsultaWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_detalheConsultaWindowLostFocus
+        setReceitaPane();
+    }//GEN-LAST:event_detalheConsultaWindowLostFocus
+
     /**
      * @param args the command line arguments
      */
@@ -506,13 +517,13 @@ public class CrudConsulta extends javax.swing.JFrame {
             consulta.setTelefone_paciente(input_telefone.getText());
             consulta.setCpf_paciente(input_cpf.getText());
             consulta.setData_Consulta(input_dataConsulta.getText());
-            consulta.setConsulta_realizada("não");
-            consulta.setReceita(textPane_receita.getText());
+            consulta.setConsulta_realizada("Não realizada");
+            /*consulta.setReceita(textPane_receita.getText());*/
 
             if (checkbox_paciente.isSelected()) {
-                consulta.setPaciente_cadastrado("sim");
+                consulta.setPaciente_cadastrado("Sim");
             } else {
-                consulta.setPaciente_cadastrado("não");
+                consulta.setPaciente_cadastrado("Não");
             }
 
         } catch (Exception e) {
@@ -575,12 +586,12 @@ public class CrudConsulta extends javax.swing.JFrame {
 
         try {
             String[] option = {"Sim", "Não"};
-            int finalizar = JOptionPane.showOptionDialog(rootPane, "Tem certeza que deseja finalizar a consulta?", "Excluir consulta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+            int finalizar = JOptionPane.showOptionDialog(rootPane, "Tem certeza que deseja finalizar a consulta?", "Finalizar consulta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 
             if (finalizar == 0) {
-                consultasList.get(getIndexConsulta()).setConsulta_realizada("sim");
+                consultasList.get(getIndexConsulta()).setConsulta_realizada("Já realizada");
             } else {
-                consultasList.get(getIndexConsulta()).setConsulta_realizada("não");
+                consultasList.get(getIndexConsulta()).setConsulta_realizada("Não realizada");
             }
 
             detalheConsulta.dispose();
@@ -608,20 +619,20 @@ public class CrudConsulta extends javax.swing.JFrame {
     }
 
     private void setReceitaPane() {
+
         consultasList.get(getIndexConsulta()).setReceita(textPane_receita.getText());
     }
 
     private void getReceitaPane() {
 
         textPane_receita.setText(consultasList.get(table_consultas.getSelectedRow()).getReceita());
-
     }
 
     private void setButtonVisible() {
 
-        if (consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("não")) {
+        if (consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("Não realizada")) {
             button_finalizar.setVisible(true);
-        } else if (consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("sim")) {
+        } else if (consultasList.get(getIndexConsulta()).getConsulta_realizada().equals("Já realizada")) {
             button_finalizar.setVisible(false);
         }
     }
